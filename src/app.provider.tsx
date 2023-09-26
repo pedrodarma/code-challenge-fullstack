@@ -6,7 +6,6 @@ import DevelopmentError from "./errors/DevelopmentError";
 import { AppProviderType } from "./app.provider.types";
 import useWorkflowState from "./states/workflow.state";
 
-
 export const AppContext = createContext<AppProviderType | undefined>(undefined);
 
 export function useAppContext() {
