@@ -4,10 +4,13 @@ on:
   pull_request_target:
     types: [opened, reopened]
 
+permissions:
+  contents: write
+
 jobs:
   assigning:
     runs-on: ubuntu-latest
     steps:
-      - uses: toshimaru/auto-author-assign@v1.6.2
+      - uses: toshimaru/auto-author-assign@v2.0.1
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
