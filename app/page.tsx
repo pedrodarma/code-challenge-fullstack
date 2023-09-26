@@ -1,6 +1,6 @@
 "use client"; // This is a client component 👈🏽
 
-import { HeaderView, ResetWorkflowButton, RoundedButton, WorkflowGraphic } from '@/components'
+import { HeaderView, ResetWorkflowButton, RoundedButton, WorkflowGraphic } from "@/components";
 
 export default function Home() {
 
@@ -14,5 +14,6 @@ export default function Home() {
 
       <ResetWorkflowButton />
     </main>
-  )
+  );
 }
+

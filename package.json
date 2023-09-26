@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "export": "next build && next export",
-    "lint": "next lint"
+    "lint": "npm run typecheck && eslint ./ --max-warnings=40 && echo '' && echo '\n\\033[0;32m✔ Your .js files look good\\033[0m' && echo '' ",
+    "lint:fix": "npm run typecheck && eslint ./ --max-warnings=40 --fix && echo '' && echo '\n\\033[0;32m✔ Your .js files look good\\033[0m' && echo '' ",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",
+    "typecheck": "tsc --strict"
   },
   "dependencies": {
     "gojs": "^2.3.11",
@@ -18,13 +21,21 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/react": "latest",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "postcss": "latest",
     "tailwindcss": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "eslint-config-prettier": "latest",
+    "eslint-plugin-flowtype": "latest",
+    "eslint-plugin-import": "latest",
+    "eslint-plugin-prettier": "latest",
+    "eslint-plugin-react": "latest",
+    "prettier": "latest"
   },
   "engines": {
     "node": "^16.0"
