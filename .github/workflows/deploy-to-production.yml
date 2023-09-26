@@ -1,0 +1,79 @@
+name: Deploy to Production 🚀
+
+on:
+  workflow_dispatch:
+    inputs:
+
+permissions:
+  checks: write
+  contents: write
+
+concurrency: production
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Install
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          check-latest: true
+      - run: npm install
+
+      - name: Build
+        run: npm run export
+        env:
+          CD: true
+          DEPLOY_TARGET: cloudflare
+      - run: touch out/.nojekyll
+      - run: touch .next/.nojekyll
+      - run: touch .nojekyll
+
+  deploy-to-production:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    needs: install
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Git config
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Actions"
+      - name: Merge main into production
+        run: |
+          git fetch --unshallow
+          git checkout production
+          git pull
+          git merge --no-ff origin/main -m "Auto-merge main into production"
+          git push
+
+  create-release-tag:
+    runs-on: ubuntu-latest
+    needs: deploy-to-production
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: production
+          fetch-depth: "0"
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          RELEASE_BRANCHES: production
+
+      - name: echo new tag
+        run: |
+          echo "The next tag version will be: ${{ steps.taggerDryRun.outputs.new_tag }}"
+      - name: echo tag
+        run: |
+          echo "The current tag is: ${{ steps.taggerDryRun.outputs.tag }}"
+      - name: echo part
+        run: |
+          echo "The version increment was: ${{ steps.taggerDryRun.outputs.part }}"
