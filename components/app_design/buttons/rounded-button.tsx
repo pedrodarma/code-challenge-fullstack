@@ -6,7 +6,7 @@ export function RoundedButton() {
 
   return (
     <>
-      <div className='fixed right-10 bottom-10 bg-gray-900 rounded-full flex text-center items-center justify-center hover:border-gray-300 hover:bg-gray-700 cursor-pointer z-10 w-12 h-12'
+      <div className='fixed right-10 bottom-20 lg:bottom-10 bg-gray-900 rounded-full flex text-center items-center justify-center hover:border-gray-300 hover:bg-gray-700 cursor-pointer z-10 w-12 h-12'
         onClick={() => {
           setShowModal(true);
         }}>
