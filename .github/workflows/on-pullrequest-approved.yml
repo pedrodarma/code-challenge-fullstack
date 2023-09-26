@@ -4,6 +4,10 @@ on:
   pull_request_review:
     types: [submitted]
 
+permissions:
+  checks: write
+  contents: write
+
 jobs:
   merge-into-dev:
     timeout-minutes: 2
