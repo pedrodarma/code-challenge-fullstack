@@ -12,7 +12,7 @@ jobs:
     environment:
       name: dev
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: echo "Running on branch ${{ github.event.pull_request.head.ref }}"
 
       - name: Set Git config
@@ -32,7 +32,7 @@ jobs:
     needs: merge-into-dev
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
