@@ -1,0 +1,61 @@
+name: On Pull Request Approved 📗
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  merge-into-dev:
+    timeout-minutes: 2
+    if: github.event.review.state == 'approved'
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "Running on branch ${{ github.event.pull_request.head.ref }}"
+
+      - name: Set Git config
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Actions"
+      - name: Merge current branch ${{ github.event.pull_request.head.ref }} into main
+        run: |
+          git fetch --unshallow
+          git checkout main
+          git pull
+          git merge --no-ff origin/${{ github.event.pull_request.head.ref }} -m "Auto-merge ${{ github.event.pull_request.head.ref }} into main"
+          git push
+
+  install:
+    runs-on: ubuntu-latest
+    needs: merge-into-dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Install
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          check-latest: true
+      - run: npm install
+
+      - name: Build
+        # run: npm run build     # runs `next build`
+        run: npm run export # runs `next export`
+        env:
+          CI: true
+      - run: touch out/.nojekyll
+      - run: touch .next/.nojekyll
+      - run: touch .nojekyll
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.4.2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: out # The folder the action should deploy.
+          CLEAN: true # Automatically remove deleted files from the deploy branch
