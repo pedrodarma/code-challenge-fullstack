@@ -1,17 +1,12 @@
+export type WorkflowTypes = "Init" | "End" | "Conditional" | "Action";
+
 export interface WorkflowComponent {
   name: string;
   type: WorkflowTypes;
   next?: Array<string>;
 }
 
-export const stepTypes = <Array<WorkflowTypes>>[
-  "Init",
-  "End",
-  "Conditional",
-  "Action",
-];
-
-export type WorkflowTypes = "Init" | "End" | "Conditional" | "Action";
+export const stepTypes = <Array<WorkflowTypes>>["Init", "End", "Conditional", "Action"];
 
 export type WorkflowSteps = Array<WorkflowComponent>;
 
