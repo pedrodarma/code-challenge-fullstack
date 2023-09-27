@@ -72,7 +72,7 @@ test("figs should contain the correct shapes for each type", () => {
 // Test for colors
 test("colors should contain the correct colors for each type", () => {
   const expectedColors = {
-    Init: "lightgreen",
+    Init: "rgb(52, 211, 153)",
     End: "red",
     Conditional: "lightblue",
     Action: "yellow",

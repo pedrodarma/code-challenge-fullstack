@@ -18,7 +18,7 @@ export const figs = {
 };
 
 export const colors = {
-  Init: "lightgreen",
+  Init: "rgb(52, 211, 153)",
   End: "red",
   Conditional: "lightblue",
   Action: "yellow",

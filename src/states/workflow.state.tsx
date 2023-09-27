@@ -74,6 +74,17 @@ export default function useWorkflowState() {
     }
   }
 
+  function _removLink(from: string, to: string) {
+    setWorkflowState(currentState => ({
+      ...currentState, steps: workflowState.steps.map(step => {
+        if (step.name === from) {
+          return { ...step, next: step.next?.filter(node => node !== to) };
+        }
+        return step;
+      })
+    }));
+  }
+
   function _resetWorkflow() {
     setWorkflowState(currentState => ({
       ...currentState, steps: [
@@ -108,6 +119,7 @@ export default function useWorkflowState() {
     createStep: _createStep,
     updateStep: _updateStep,
     removeStep: _removeStep,
+    removeLink: _removLink,
     resetWorkflow: _resetWorkflow,
   };
 
