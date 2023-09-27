@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { WorkflowSteps, WorkflowComponent, WorkflowTypes } from "../models";
+import { toast } from "react-hot-toast";
 
 export default function useWorkflowState() {
   //  ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -39,17 +40,37 @@ export default function useWorkflowState() {
   }
 
   function _createStep(type: WorkflowTypes, name: string) {
-    setWorkflowState(currentState => ({ ...currentState, steps: [...workflowState.steps, { name, type }] }));
+    if(name.length===0) {
+      toast.error("The step name should not be empty");
+    }
+
+    const isUnique = _checkUniqueName(name);
+
+    if (isUnique) {
+      setWorkflowState(currentState => ({ ...currentState, steps: [...workflowState.steps, { name: name.trim(), type }] }));
+    }
+    else {
+      toast.error("The name should be unique in the workflow");
+    }
   }
 
   function _updateStep(prevStepName: string, updatedStep: WorkflowComponent) {
-    const updatedSteps = workflowState.steps.map(step => step.name === prevStepName ? updatedStep : step);
-    const updatedStepsAndNext = updatedSteps.map(step => ({ ...step, next: step.next?.map(name => name === prevStepName ? updatedStep.name : name) }));
-    setWorkflowState(currentState => ({ ...currentState, steps: updatedStepsAndNext }));
+    try {
+      const updatedSteps = workflowState.steps.map(step => step.name === prevStepName ? updatedStep : step);
+      const updatedStepsAndNext = updatedSteps.map(step => ({ ...step, next: step.next?.map(name => name === prevStepName ? updatedStep.name : name) }));
+      setWorkflowState(currentState => ({ ...currentState, steps: updatedStepsAndNext }));
+    } catch {
+      toast.error("Error! Unable to update.");
+    }
   }
 
   function _removeStep(name: string) {
-    setWorkflowState(currentState => ({ ...currentState, steps: workflowState.steps.filter(step => step.name !== name) }));
+    const canRemove = _canRemoveStep();
+    if (canRemove) {
+      setWorkflowState(currentState => ({ ...currentState, steps: workflowState.steps.filter(step => step.name !== name) }));
+    } else {
+      toast.error("The workflow should have at least one Conditional and one Action.");
+    }
   }
 
   function _resetWorkflow() {
@@ -61,6 +82,22 @@ export default function useWorkflowState() {
         { name: "End", type: "End" }
       ]
     }));
+  }
+
+  function _checkUniqueName(name: string) {
+    const isUnique = !workflowState.steps.map(step => step.name).includes(name.trim());
+    return isUnique;
+  }
+
+  function _getCurrentStepByName(name: string) {
+    const step = workflowState.steps.filter(step => step.name === name)[0];
+    return step;
+  }
+
+  function _canRemoveStep(): boolean {
+    const conditionalCounter = workflowState.steps.filter(step => step.type === "Conditional").length;
+    const actionsCounter = workflowState.steps.filter(step => step.type === "Action").length;
+    return actionsCounter > 1 && conditionalCounter > 1;
   }
 
   //  ╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

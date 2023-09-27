@@ -1,7 +1,6 @@
 "use client"; // This is a client component 👈🏽
 
 import { createContext, ReactNode, useContext } from "react";
-// import "src/configuration/client-env";
 import DevelopmentError from "./errors/DevelopmentError";
 import { AppProviderType } from "./app.provider.types";
 import useWorkflowState from "./states/workflow.state";

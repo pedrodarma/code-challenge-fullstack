@@ -8,6 +8,17 @@
   "plugins": [
     "react"
   ],
+  "globals": {
+    "jest": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "describe": true,
+    "it": true,
+    "test": true,
+    "extend": true,
+    "toBeInTheDocument": true,
+    "expect": true
+  },
   "rules": {
     // "indent": ["warn", 2],
     "max-len": ["off", 200],
