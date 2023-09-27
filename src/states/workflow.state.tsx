@@ -40,8 +40,9 @@ export default function useWorkflowState() {
   }
 
   function _createStep(type: WorkflowTypes, name: string) {
-    if(name.length===0) {
+    if (name.length === 0) {
       toast.error("The step name should not be empty");
+      return;
     }
 
     const isUnique = _checkUniqueName(name);
