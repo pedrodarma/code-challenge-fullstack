@@ -40,8 +40,9 @@ export default function useWorkflowState() {
   }
 
   function _createStep(type: WorkflowTypes, name: string) {
-    if(name.length===0) {
+    if (name.length === 0) {
       toast.error("The step name should not be empty");
+      return;
     }
 
     const isUnique = _checkUniqueName(name);
@@ -71,6 +72,17 @@ export default function useWorkflowState() {
     } else {
       toast.error("The workflow should have at least one Conditional and one Action.");
     }
+  }
+
+  function _removLink(from: string, to: string) {
+    setWorkflowState(currentState => ({
+      ...currentState, steps: workflowState.steps.map(step => {
+        if (step.name === from) {
+          return { ...step, next: step.next?.filter(node => node !== to) };
+        }
+        return step;
+      })
+    }));
   }
 
   function _resetWorkflow() {
@@ -107,6 +119,7 @@ export default function useWorkflowState() {
     createStep: _createStep,
     updateStep: _updateStep,
     removeStep: _removeStep,
+    removeLink: _removLink,
     resetWorkflow: _resetWorkflow,
   };
 

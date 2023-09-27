@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "gojs": "^2.3.11",
+    "gojs-react": "^1.1.2",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
