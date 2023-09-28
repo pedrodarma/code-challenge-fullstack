@@ -88,13 +88,5 @@
       "ObjectExpression": 1,
       "ignoredNodes": ["ConditionalExpression"]
     }]
-    // "@typescript-eslint/no-explicit-any": ["off"]
-    // "@typescript-eslint/no-non-null-assertion": ["error"]
-    // "prettier/prettier": ["error", {"singleQuote": false, "parser": "typescript", "endOfLine": "auto"}]
-  },
-  "settings": {
-    // "flowtype": {
-    //   "onlyFilesWithFlowAnnotation": false
-    // }
   }
 }
